@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,7 +11,8 @@ public class painting {
     String url;
     String ascii;
     String title;
-    public painting(String myUrl, String myTitle) throws Exception{
+    boolean valid;
+    public painting(String myUrl, String myTitle) throws IOException {
         URL url;
         title = myTitle;
         url = new URL(myUrl);
@@ -20,7 +22,7 @@ public class painting {
 
 
         int detail = 50;
-        int detailx = detail*3*(img.getWidth()/img.getHeight());
+        int detailx = (int) (detail*3*(((double)img.getWidth())/img.getHeight()));
         int detaily = detail;
 
 
@@ -58,6 +60,7 @@ public class painting {
             }
             ascii+='\n';
         }
+        valid = true;
 
     }
     public String toString() {
