@@ -1,7 +1,10 @@
+import org.apache.log4j.BasicConfigurator;
+
 import java.util.Scanner;
 public class museum {
     //user input driver
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         System.out.println(((int)'A')-65);
         boolean playing = true;
         boolean mapNotFound = true;

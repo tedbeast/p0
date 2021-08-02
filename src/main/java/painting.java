@@ -4,19 +4,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 
-public class painting {
-    String url;
+public class painting implements Callable<String> {
+    String urlString;
     String ascii;
     String title;
+    URL url;
     boolean valid;
-    public painting(String myUrl, String myTitle) throws IOException {
-        URL url;
+    public painting(String myUrl, String myTitle){
+        urlString = myUrl;
         title = myTitle;
-        url = new URL(myUrl);
-        ascii = "";
+
+    }
+
+    public String call() throws IOException {
+        url = new URL(urlString);
         InputStream in = url.openStream();
         BufferedImage img = ImageIO.read(in);
 
@@ -24,7 +29,8 @@ public class painting {
         int detail = 50;
         int detailx = (int) (detail*3*(((double)img.getWidth())/img.getHeight()));
         int detaily = detail;
-
+        ascii+=detailx;
+        ascii+=detaily;
 
         for(int i = 0; i < detaily-1; i++) {
             for(int j = 0; j < detailx-1; j++) {
@@ -61,8 +67,10 @@ public class painting {
             ascii+='\n';
         }
         valid = true;
-
+        return ascii+title;
     }
+
+
     public String toString() {
         return ascii+title;
     }

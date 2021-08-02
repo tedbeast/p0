@@ -1,5 +1,7 @@
+import org.apache.log4j.BasicConfigurator;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -14,6 +16,10 @@ public class mapTest {
     static String name2 = "testMap2";
     static map map1;
     static map map2;
+    @BeforeClass
+    public static void initializer(){
+        BasicConfigurator.configure();
+    }
     @Before
     public void setUp(){
         map1 = new map(name1);
@@ -24,10 +30,11 @@ public class mapTest {
         map1 = null;
         map2 = null;
     }
+    /*
     @Test
     public void emptyTest(){
         assertTrue(map1.isValid());
-    }
+    }*/
     @Test
     public void singlePaintingTest(){
         Integer[] correctCoord = {1,1};

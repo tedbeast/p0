@@ -1,6 +1,9 @@
 import org.junit.*;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static org.junit.Assert.*;
 
@@ -40,9 +43,12 @@ public class paintingTest {
     @Test
     public void drawingTest(){
         try {
+            ExecutorService executorService = Executors.newFixedThreadPool(1);
             myPainting = new painting(url, title);
-            System.out.println(myPainting);
-        } catch (IOException e) {
+            Future<String> future = (executorService.submit(myPainting));
+
+            System.out.println(future.get());
+        } catch (Exception e) {
             fail();
         }
     }
