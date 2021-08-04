@@ -1,10 +1,9 @@
-
-
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
@@ -19,10 +18,15 @@ public class map {
     int y;
     int x;
     ArrayList<Future<String>> futures;
+    PrintWriter writer;
     private boolean valid = false;
-    //read and initialize map and create all required painting objects
-    public map(String mapName) {
+
+    //read and initialize map and create all required painting threads
+    public map(String mapName, PrintWriter writerName) {
+        //BasicConfigurator.configure();
+        writer = writerName;
         try {
+
             futures = new ArrayList<Future<String>>();
             String thisLine;
             BufferedReader mapIn = new BufferedReader(new FileReader(mapName));
@@ -55,6 +59,9 @@ public class map {
                 }
             }
             mapIn.close();
+            if(writer!=null) {
+                writer.println("Player has entered the museum.");
+            }
             valid = true;
 
 
@@ -98,40 +105,47 @@ public class map {
             if(coords!=null){
                 y=coords[0];
                 x=coords[1];
+                recordAndLog("Player jumped to "+command+".");
                 return 5;
+
             }
+            recordAndLog("Player tried to jump to non-existent exhibit.");
             return 6;
         }
         //up
         else if(command=='w') {
             if(move(-1, 0)) {
-                log.info("Moving up.");
+                recordAndLog("Moving up.");
                 return 1;
             }
+            recordAndLog("Couldn't move up.");
             return 7;
         }
         //left
         else if(command=='a') {
             if(move(0, -1)) {
-                log.info("Moving left.");
+                recordAndLog("Moving left.");
                 return 1;
             }
+            recordAndLog("Couldn't move left.");
             return 7;
         }
         //down
         else if(command=='s') {
             if(move(1, 0)) {
-                log.info("Moving down.");
+                recordAndLog("Moving down.");
                 return 1;
             }
+            recordAndLog("Couldn't move down.");
             return 7;
         }
         //right
         else if(command=='d') {
             if(move(0, 1)) {
-                log.info("Moving right.");
+                recordAndLog("Moving right.");
                 return 1;
             }
+            recordAndLog("Couldn't move right.");
             return 7;
         }
         //view action
@@ -139,35 +153,47 @@ public class map {
             temp = capitalToIndex(board[y][x]);
             if(temp==-1) {
                 //f was pressed on an empty space
-                log.warn("Player tried to view empty space.");
+                recordAndLog("Player tried to view empty space.");
                 return 2;
             }
             else {
                 //print the painting
-                log.info("Player viewed painting: "+paintings[temp].title);
+
                 try {
                     System.out.println(futures.get(temp).get());
                 }catch(Exception e){
-                    log.error("There was something wrong with retrieving the painting URL.");
+
+                    recordAndLog("There was something wrong with retrieving the painting URL.");
+                    return 9;
                 }
+                recordAndLog("Player viewed painting: "+paintings[temp].title);
                 return 3;
             }
 
         }
         //quit
         else if(command=='q'){
-            log.info("Player quit.");
+            recordAndLog("Player quit.");
             return 8;
         }
-        log.warn("Player wrote invalid command.");
+        recordAndLog("Player wrote invalid command.");
         return 4;
+    }
+    public void recordAndLog(String in){
+        log.info(in);
+        if(writer!=null){
+            writer.println(in);
+        }
     }
     //adjust the current user position
     public boolean move(int my, int mx) {
+        try{
         if(board[y+my][x+mx]!='w') {
             y = y+my;
             x = x+mx;
             return true;
+        }}catch(Exception e){
+
         }
         return false;
     }

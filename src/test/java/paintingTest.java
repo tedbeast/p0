@@ -23,6 +23,7 @@ public class paintingTest {
     public static void tearDown(){
         myPainting = null;
     }
+    //Painting should be instantiated without exceptions
     @Test
     public void connectionTest(){
         try {
@@ -31,15 +32,21 @@ public class paintingTest {
             fail();
         }
     }
+    //Bad URL should throw an exception
     @Test
     public void badURLTest(){
         try {
+            ExecutorService executorService = Executors.newFixedThreadPool(1);
             myPainting = new painting(badURL, title);
+            Future<String> future = (executorService.submit(myPainting));
+
+            System.out.println(future.get());
             fail();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
+    //Can we print painting without exceptions?
     @Test
     public void drawingTest(){
         try {
@@ -52,5 +59,4 @@ public class paintingTest {
             fail();
         }
     }
-
 }

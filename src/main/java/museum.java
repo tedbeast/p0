@@ -1,18 +1,32 @@
 import org.apache.log4j.BasicConfigurator;
+import java.io.*;
 
+import java.sql.Timestamp;
 import java.util.Scanner;
 public class museum {
     //user input driver
     public static void main(String[] args) {
-        BasicConfigurator.configure();
-        System.out.println(((int)'A')-65);
+        //inserting timestamp allows us to create infinite amount of museumhistory files.
+        String timeString = (new Timestamp(System.currentTimeMillis())).toString();
+        timeString = timeString.replaceAll("-","");
+        timeString = timeString.replaceAll(":","");
+        timeString = timeString.replaceAll(" ","");
+        System.out.println(timeString);
         boolean playing = true;
         boolean mapNotFound = true;
+        PrintWriter writer = null;
         map mapA;
+        try {
+            writer = new PrintWriter("MuseumHistory"+timeString+".txt", "UTF-8");
+
+        }catch(Exception e){
+            System.out.println("Error in creating output file. ");
+        }
+        //ask the user to input a valid map file until they do
         do{
             System.out.println("Please input game file");
             String mapName = getName();
-            mapA = new map(mapName);
+            mapA = new map(mapName, writer);
 
             if(mapA.isValid())
                 mapNotFound=false;
@@ -20,7 +34,7 @@ public class museum {
                 System.out.println("Please try another input.");
 
         }while(mapNotFound);
-
+        //the user input loop
         Scanner consoleIn = new Scanner(System.in);
         while(playing) {
             System.out.println(mapA);
@@ -52,9 +66,15 @@ public class museum {
                 else if(code == 8) {
                     System.out.println("Thank you for visiting the museum!");
                     playing = false;
+                    writer.close();
+                    System.exit(0);
+                }
+                else if(code == 9){
+                    System.out.println("The painting URL could not be reached.");
                 }
             }
         }
+        consoleIn.close();
     }
     //get the name of the map file used (like map1)
     public static String getName() {

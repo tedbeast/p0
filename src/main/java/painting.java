@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
@@ -14,10 +13,11 @@ public class painting implements Callable<String> {
     String title;
     URL url;
     boolean valid;
+
     public painting(String myUrl, String myTitle){
         urlString = myUrl;
         title = myTitle;
-
+        ascii = "";
     }
 
     public String call() throws IOException {
@@ -25,13 +25,10 @@ public class painting implements Callable<String> {
         InputStream in = url.openStream();
         BufferedImage img = ImageIO.read(in);
 
-
-        int detail = 50;
+        int detail = 29;
         int detailx = (int) (detail*3*(((double)img.getWidth())/img.getHeight()));
         int detaily = detail;
-        ascii+=detailx;
-        ascii+=detaily;
-
+        //generate ascii, with white represented by space and black represented by @
         for(int i = 0; i < detaily-1; i++) {
             for(int j = 0; j < detailx-1; j++) {
                 Color color = new Color(img.getRGB(j*(img.getWidth())/detailx, i*(img.getHeight())/detaily));
@@ -67,11 +64,6 @@ public class painting implements Callable<String> {
             ascii+='\n';
         }
         valid = true;
-        return ascii+title;
-    }
-
-
-    public String toString() {
         return ascii+title;
     }
 }
