@@ -11,7 +11,7 @@ public class museum {
         timeString = timeString.replaceAll("-","");
         timeString = timeString.replaceAll(":","");
         timeString = timeString.replaceAll(" ","");
-        System.out.println(timeString);
+
         boolean playing = true;
         boolean mapNotFound = true;
         PrintWriter writer = null;
