@@ -1,5 +1,0 @@
-Player has entered the museum.
-Moving right.
-Player jumped to A.
-Player viewed painting: Birth of Venus, Sandro Botticelli
-Player quit.
