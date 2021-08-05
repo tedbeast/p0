@@ -26,7 +26,7 @@ public class map {
         //BasicConfigurator.configure();
         writer = writerName;
         try {
-
+            log.info("Constructing game map.");
             futures = new ArrayList<Future<String>>();
             String thisLine;
             BufferedReader mapIn = new BufferedReader(new FileReader(mapName));
@@ -34,6 +34,7 @@ public class map {
             sizex = Integer.parseInt(mapIn.readLine());
             numPaintings = Integer.parseInt(mapIn.readLine());
             board = new char[sizey][sizex];
+            log.info("Initializing game board.");
             for(int i = 0; i < sizey; i++) {
                 thisLine = mapIn.readLine();
                 for(int j = 0; j < sizex; j++) {
@@ -47,6 +48,7 @@ public class map {
                 }
             }
             if(numPaintings > 0) {
+                log.info("Initializing painting.");
                 ExecutorService executorService = Executors.newFixedThreadPool(numPaintings);
                 paintings = new painting[numPaintings];
                 titles = new String[numPaintings];
@@ -56,10 +58,13 @@ public class map {
                     paintings[i] = new painting(mapIn.readLine(), titles[i]);
                     Future<String> tempFuture = executorService.submit(paintings[i]);
                     futures.add(tempFuture);
+                    log.info("Generating painting "+i);
                 }
             }
             mapIn.close();
+            log.info("Museum construction completed.");
             if(writer!=null) {
+
                 writer.println("Player has entered the museum.");
             }
             valid = true;
