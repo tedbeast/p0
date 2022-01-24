@@ -1,3 +1,5 @@
+//java -jar jenkins.war --httpPort=8080.
+
 pipeline {
     agent any
     stages {
@@ -7,7 +9,6 @@ pipeline {
                     bat 'mvn clean compile'
                 }
             }
-
        }
           stage ('Testing Stage'){
             steps {
