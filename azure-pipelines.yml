@@ -12,8 +12,6 @@ pool:
 steps:
 
   - script: |
-      mvn validate
-      mvn test
       mvn clean compile
 
     displayName: 'mvn clean compile'
